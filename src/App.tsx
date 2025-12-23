@@ -1,14 +1,24 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import AdminLayout from './layouts/AdminLayout';
+import Dashboard from './pages/Dashboard'; 
+import ProductList from './pages/ProductList';
+import Inventory from './pages/Inventory';
 
 function App() {
   return (
     <Router>
       <AdminLayout>
-        <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-200">
-          <h1 className="text-2xl font-bold text-slate-800">Welcome, Admin</h1>
-          <p className="text-gray-500 mt-2">Your folders are no longer empty!</p>
-        </div>
+        <Routes>
+          {/* This makes the Dashboard the home page (path="/") */}
+          <Route path="/" element={<Dashboard />} />
+          
+          {/* This keeps your Inventory table accessible at /products */}
+          <Route path="/products" element={<Inventory />} />
+          
+          {/* We will add Customers and other pages here later */}
+          <Route path="/customers" element={<div>Customers Page Coming Soon</div>} />
+          <Route path="/products" element={<ProductList />} />
+        </Routes>
       </AdminLayout>
     </Router>
   );
