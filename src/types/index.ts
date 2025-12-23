@@ -8,10 +8,18 @@ export interface Product {
   price: number;
   updated_at: string;
 }
-
 export interface User {
   id: number;
   name: string;
   email: string;
   role: 'admin' | 'customer';
+}
+export interface Customer {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  total_orders: number;
+  status: 'active' | 'inactive';
+  avatar?: string;
 }

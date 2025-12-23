@@ -38,7 +38,7 @@ const Dashboard = () => {
                     <div className="w-16 h-16 rounded-full bg-blue-100 mx-auto mb-2 border-2 border-white shadow-md overflow-hidden transition group-hover:scale-105">
                         <img src={`https://i.pravatar.cc/150?u=${i}`} alt="user" />
                     </div>
-                    <p className="text-sm font-bold text-gray-700">User {i}.</p>
+                    <p className="text-sm font-bold text-gray-700">ahmed {i}</p>
                  </div>
                ))}
             </div>

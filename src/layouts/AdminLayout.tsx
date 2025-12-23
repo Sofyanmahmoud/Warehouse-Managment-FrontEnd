@@ -80,7 +80,7 @@ const AdminLayout: React.FC<LayoutProps> = ({ children }) => {
         type="search" 
         id="search" 
         className="block w-full p-3 ps-9 bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-indigo-500 focus:border-indigo-500 shadow-sm placeholder:text-gray-400 outline-none transition-all" 
-        placeholder="Search or type a command" 
+        placeholder="Search" 
         required 
       />
       <button 

@@ -1,25 +1,25 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import AdminLayout from './layouts/AdminLayout';
-import Dashboard from './pages/Dashboard'; 
+import Dashboard from './pages/Dashboard';
 import ProductList from './pages/ProductList';
-import Inventory from './pages/Inventory';
+import Customers from './pages/Customers';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
 
 function App() {
   return (
     <Router>
-      <AdminLayout>
-        <Routes>
-          {/* This makes the Dashboard the home page (path="/") */}
-          <Route path="/" element={<Dashboard />} />
-          
-          {/* This keeps your Inventory table accessible at /products */}
-          <Route path="/products" element={<Inventory />} />
-          
-          {/* We will add Customers and other pages here later */}
-          <Route path="/customers" element={<div>Customers Page Coming Soon</div>} />
-          <Route path="/products" element={<ProductList />} />
-        </Routes>
-      </AdminLayout>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+
+        {/* Admin routes*/}
+        <Route path="/" element={<AdminLayout><Dashboard /></AdminLayout>} />
+        <Route path="/products" element={<AdminLayout><ProductList /></AdminLayout>} />
+        <Route path="/customers" element={<AdminLayout><Customers /></AdminLayout>} />
+        {/* customer routes*/}
+        <Route path="/shop" element={<div>Welcome to the Customer Shop!</div>} />
+      </Routes>
     </Router>
   );
 }
