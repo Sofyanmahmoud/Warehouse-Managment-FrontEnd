@@ -1,76 +1,79 @@
-import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { UserLoginSchema, type UserLoginForm } from '../lib/validation';
+import { login } from '../api/auth';
 
 const Login = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const { register, handleSubmit, formState: { errors, isSubmitting }, setError } = useForm<UserLoginForm>({
+    resolver: zodResolver(UserLoginSchema),
+  });
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    // user or admin
-    if (username.toLowerCase() === 'admin') {
-      console.log("Redirecting to Admin Dashboard...");
-      navigate('/'); 
-    } else {
-      console.log("Redirecting to Customer Shop...");
-      navigate('/shop'); 
+  const onSubmit = async (data: UserLoginForm) => {
+    try {
+      const response = await login(data);
+      if (response.user.role === 'admin') {
+        navigate('/'); // Admin Dashboard
+      } else {
+        navigate('/shop'); // Customer Shop
+      }
+    } catch (err: any) {
+      console.error(err);
+      const message = err.response?.data?.message || 'Login failed';
+      setError('root', { message });
     }
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-[#F3F4F6] px-4">
-      {/* Compact Glass Card */}
-      <div className="w-full max-w-[380px] bg-white/80 backdrop-blur-2xl border border-white rounded-[35px] shadow-2xl p-8 flex flex-col items-center">
-        
-        {/* Profile Icon */}
-        <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mb-4 shadow-inner">
-          <svg className="w-8 h-8 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-          </svg>
+    <div className="min-h-screen w-full flex items-center justify-center bg-noir-900 px-4">
+      {/* Floating Dark Card */}
+      <div className="w-full max-w-[380px] bg-noir-800/80 backdrop-blur-2xl border border-white/5 rounded-[40px] shadow-2xl p-10 flex flex-col items-center">
+
+        {/* Minimalist Logo/Icon */}
+        <div className="w-16 h-16 bg-noir-700 rounded-full flex items-center justify-center mb-6 border border-white/5 shadow-inner">
+          <div className="w-6 h-6 rounded-full border-2 border-accent-gold animate-pulse"></div>
         </div>
 
-        <h1 className="text-2xl font-bold text-gray-900 mb-1">Welcome Back</h1>
-        <p className="text-gray-500 mb-8 font-medium text-xs uppercase tracking-wider text-center">
-          Enter credentials to access your account
-        </p>
+        <h1 className="text-2xl font-bold text-white mb-1 tracking-tight">Welcome Back</h1>
+        <p className="text-gray-500 mb-8 text-[10px] uppercase tracking-[0.3em] font-medium">ENTER YOUR DATA</p>
 
-        <form onSubmit={handleLogin} className="w-full space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-4">
           <div className="space-y-1.5">
-            <label className="text-xs font-bold text-gray-500 ml-1">Username</label>
-            <input 
-              type="text" 
-              required
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="Type 'admin' or your name"
-              className="w-full bg-white/50 border border-gray-100 rounded-xl py-3 px-5 text-sm text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none transition-all shadow-sm"
+            <label className="text-[10px] font-bold text-gray-500 ml-1 uppercase tracking-widest">Email</label>
+            <input
+              {...register('email')}
+              type="email"
+              placeholder="Email Address"
+              className="w-full bg-noir-900/50 border border-white/5 rounded-2xl py-4 px-6 text-sm text-white placeholder:text-gray-700 focus:ring-1 focus:ring-accent-gold outline-none transition-all shadow-inner"
             />
+            {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-bold text-gray-500 ml-1">Password</label>
-            <input 
-              type="password" 
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+            <label className="text-[10px] font-bold text-gray-500 ml-1 uppercase tracking-widest">Password</label>
+            <input
+              {...register('password')}
+              type="password"
               placeholder="••••••••"
-              className="w-full bg-white/50 border border-gray-100 rounded-xl py-3 px-5 text-sm text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none transition-all shadow-sm"
+              className="w-full bg-noir-900/50 border border-white/5 rounded-2xl py-4 px-6 text-sm text-white placeholder:text-gray-700 focus:ring-1 focus:ring-accent-gold outline-none transition-all shadow-inner"
             />
+            {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>}
           </div>
 
-          <button 
-            type="submit" 
-            className="w-full bg-white border border-gray-50 py-3.5 rounded-xl text-blue-600 font-bold text-base shadow-md hover:shadow-lg hover:bg-gray-50 transition-all mt-4"
+          {errors.root && <p className="text-red-500 text-xs text-center">{errors.root.message}</p>}
+
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="w-full bg-accent-gold py-4 rounded-2xl text-noir-900 font-black text-xs uppercase tracking-[0.2em] shadow-[0_10px_30px_rgba(212,175,55,0.2)] hover:scale-[1.02] active:scale-[0.98] transition-all mt-4 disabled:opacity-50"
           >
-            Sign In
+            {isSubmitting ? 'Loading...' : 'Login'}
           </button>
         </form>
 
-        <p className="mt-6 text-xs text-gray-400">
-          Don't have an account? <Link to="/signup" className="text-blue-600 font-bold hover:underline">Sign Up</Link>
+        <p className="mt-8 text-[10px] text-gray-600 uppercase tracking-widest font-medium">
+          New User? <Link to="/signup" className="text-accent-gold hover:underline">SignUp</Link>
         </p>
       </div>
     </div>

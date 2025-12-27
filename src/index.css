@@ -1,1 +1,19 @@
 @import "tailwindcss";
+
+@theme {
+  --color-noir-900: #0B0F1A;
+  --color-noir-800: #161B22;
+  --color-noir-700: #21262D;
+  --color-accent-gold: #D4AF37;
+}
+
+/* Base resets for the Noir theme */
+html, body, #root {
+  background-color: var(--color-noir-900);
+  color: #ffffff;
+  min-height: 100vh;
+  margin: 0;
+  /* Default browser scrollbar behavior restored */
+  scrollbar-color: auto;
+  scrollbar-width: auto;
+}
